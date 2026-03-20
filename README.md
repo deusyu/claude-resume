@@ -50,9 +50,29 @@ git clone https://github.com/deusyu/claude-resume.git
 cd claude-resume
 ```
 
-### 2. Add your experiences
+### 2. Initialize your experiences
 
-Edit the files under `experiences/`:
+**Option A: Guided setup (recommended)**
+
+```
+/init
+```
+
+The skill walks you through a Q&A — name, education, work history, projects, skills — and generates all `experiences/` files for you.
+
+**Option B: Import from existing resume**
+
+Paste your existing resume or LinkedIn export:
+
+```
+/init <paste your resume text here>
+```
+
+The skill parses and structures it into the right format automatically.
+
+**Option C: Edit manually**
+
+Edit the files under `experiences/` directly:
 
 | File | Content |
 |------|---------|
@@ -94,6 +114,7 @@ Generated PDFs are copied to `output/`.
 
 | File | Purpose |
 |------|---------|
+| `.claude/commands/init.md` | Onboarding skill — guided Q&A or paste-to-structure import |
 | `.claude/commands/generate-resume.md` | Core skill — reads experiences, analyzes JD, generates tailored `.tex` |
 | `.claude/commands/add-experience.md` | Helper skill — add/update experiences via natural language |
 | `experiences/` | Structured experience data (source of truth) |
@@ -105,6 +126,13 @@ Generated PDFs are copied to `output/`.
 | `output/` | Generated PDF output directory |
 
 ## Skill Details
+
+### `/init [optional: paste resume text]`
+
+Onboarding skill. Two modes:
+
+- **No arguments** → guided Q&A, one question at a time (name → education → work → projects → skills → honors)
+- **With text** → parses your existing resume or LinkedIn export into structured `experiences/` files
 
 ### `/generate-resume [job title or JD file path]`
 

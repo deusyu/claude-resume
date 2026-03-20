@@ -29,17 +29,14 @@ AI 驱动的简历管理系统 — 一份素材，N 份定制简历。
 git clone https://github.com/deusyu/claude-resume.git
 cd claude-resume
 
-# 2. 编辑 experiences/ 下的文件，填入你的经历
-#    - experiences/profile.md       → 个人信息 + 教育
-#    - experiences/work/*.md        → 工作详历（每家公司一个文件）
-#    - experiences/projects.md      → 个人项目
-#    - experiences/skills.md        → 技能清单
-#    - experiences/honors.md        → 荣誉 + 量化指标
-
-# 3. 启动 Claude Code，使用 Skill 生成简历
+# 2. 启动 Claude Code
 claude
 
-# 4. 在 Claude Code 中运行
+# 3. 初始化素材库（二选一）
+/init                          # 问答引导，一步步填写
+/init <粘贴你的简历或经历文本>    # 自动解析结构化
+
+# 4. 生成简历
 /generate-resume 后端开发工程师
 
 # 或指定 JD 文件
@@ -64,6 +61,7 @@ claude-resume/
 ├── output/                      # 生成的 PDF
 ├── .history/                    # .tex 历史备份
 ├── .claude/commands/            # Claude Code Skills
+│   ├── init.md                  #   /init — 初始化素材库
 │   ├── generate-resume.md       #   /generate-resume
 │   └── add-experience.md        #   /add-experience
 ├── resume.tex                   # 当前 LaTeX 源文件
@@ -72,6 +70,13 @@ claude-resume/
 ```
 
 ## Skill 说明
+
+### `/init [可选：粘贴简历文本]`
+
+初始化 Skill。两种模式：
+
+- **无参数** → 问答引导，一次问一个问题（姓名 → 教育 → 工作 → 项目 → 技能 → 荣誉）
+- **带文本** → 解析你的现有简历或 LinkedIn 导出，自动生成 `experiences/` 结构化文件
 
 ### `/generate-resume [岗位名称或JD文件路径]`
 
