@@ -6,6 +6,10 @@ Claude Code skill that generates tailored LaTeX résumés from structured experi
 
 > Not just another skill — a reference project showing how to build a complete workflow with Claude Code Skills.
 
+<p align="center">
+  <img src="assets/demo-output.png" alt="Generated PDF Example" width="600">
+</p>
+
 ---
 
 ## How It Works
