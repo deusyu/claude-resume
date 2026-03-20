@@ -11,28 +11,41 @@ Claude Code skill that generates tailored LaTeX résumés from structured experi
 ## How It Works
 
 ```
-experiences/  (Markdown with YAML frontmatter)
-  │
-  ▼
-/generate-resume "Backend Engineer"
-  │  reads all experience files
-  │  analyzes job requirements
-  │  selects & reframes relevant experiences
-  │  adjusts emphasis, ordering, skills
-  ▼
-resume.tex  (tailored LaTeX source)
-  │
-  ▼
-make en → output/Name-Title.pdf
+┌─────────────────────────────────────────────────────────┐
+│  Onboarding (/init)                                     │
+│                                                         │
+│  Paste resume  ──→  auto-parse  ──→  experiences/*.md   │
+│       or                                                │
+│  Q&A guided    ──→  step by step ──→  experiences/*.md  │
+└──────────────────────────┬──────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│  Generate (/generate-resume "Backend Engineer")         │
+│                                                         │
+│  read experiences  →  analyze JD  →  tailor & reframe   │
+│                                                         │
+│  → resume.tex  →  make en  →  output/Name-Title.pdf     │
+└─────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│  Maintain (/add-experience)                             │
+│                                                         │
+│  "Got promoted" / "New project" / "Got certified"       │
+│  → auto-update experiences/*.md                         │
+└─────────────────────────────────────────────────────────┘
 ```
 
 The same work experience gets different framing depending on the target role. A cloud platform project emphasizes architecture design for infra roles, but highlights workflow orchestration for AI Agent roles.
 
 ## Features
 
+- **Zero-config onboarding** — paste an existing resume or answer a few questions; no manual Markdown editing required
 - **Experience-driven** — work history, skills, and honors stored as Markdown; presentation is separate from data
 - **AI-powered tailoring** — auto-selects experiences, adjusts bullet points, reorders priorities based on JD
 - **Multi-role adaptation** — same experience, different angles (backend / cloud-native / AI / fullstack)
+- **Natural language maintenance** — add new experiences, skills, or certifications by just telling Claude
 - **LaTeX output** — professional typesetting via XeLaTeX, based on [billryan/resume](https://github.com/billryan/resume)
 - **Version tracking** — `.history/` auto-backup before each generation
 
@@ -48,21 +61,22 @@ The same work experience gets different framing depending on the target role. A 
 ```bash
 git clone https://github.com/deusyu/claude-resume.git
 cd claude-resume
+claude
 ```
 
-### 2. Initialize your experiences
+### 2. Onboarding — initialize your experience data
 
-**Option A: Guided setup (recommended)**
+**Option A: Guided setup (recommended for first-time users)**
 
 ```
 /init
 ```
 
-The skill walks you through a Q&A — name, education, work history, projects, skills — and generates all `experiences/` files for you.
+The skill walks you through a Q&A — name, education, work history, projects, skills — one question at a time. All `experiences/` files are generated automatically.
 
 **Option B: Import from existing resume**
 
-Paste your existing resume or LinkedIn export:
+Paste your existing resume, LinkedIn export, or any text describing your background:
 
 ```
 /init <paste your resume text here>
@@ -84,8 +98,6 @@ Edit the files under `experiences/` directly:
 
 ### 3. Generate a résumé
 
-In Claude Code:
-
 ```
 /generate-resume Backend Engineer
 ```
@@ -96,7 +108,7 @@ Or point to a JD file:
 /generate-resume jobs/bytedance-backend.md
 ```
 
-The skill will show a tailoring plan (what to include, what to cut, how to reframe) and ask for confirmation before generating.
+The skill shows a tailoring plan (what to include, what to cut, how to reframe) and asks for confirmation before generating.
 
 ### 4. Build PDF
 
@@ -106,17 +118,22 @@ make zh    # Chinese PDF (resume-zh.pdf)
 make all   # Both
 ```
 
-### 5. Find your output
+### 5. Keep it updated
 
-Generated PDFs are copied to `output/`.
+As your career evolves, update your experience data with natural language:
+
+```
+/add-experience Led a new project building a real-time data pipeline, processing 1M events/sec
+/add-experience Got AWS Solutions Architect Professional certification
+```
 
 ## Project Structure
 
 | File | Purpose |
 |------|---------|
-| `.claude/commands/init.md` | Onboarding skill — guided Q&A or paste-to-structure import |
-| `.claude/commands/generate-resume.md` | Core skill — reads experiences, analyzes JD, generates tailored `.tex` |
-| `.claude/commands/add-experience.md` | Helper skill — add/update experiences via natural language |
+| `.claude/commands/init.md` | Onboarding — guided Q&A or paste-to-structure import |
+| `.claude/commands/generate-resume.md` | Core — reads experiences, analyzes JD, generates tailored `.tex` |
+| `.claude/commands/add-experience.md` | Maintain — add/update experiences via natural language |
 | `experiences/` | Structured experience data (source of truth) |
 | `jobs/_template.md` | Template for job description input |
 | `resume.tex` | Current active LaTeX source |
@@ -125,7 +142,7 @@ Generated PDFs are copied to `output/`.
 | `.history/` | Auto-backup of previous `.tex` versions |
 | `output/` | Generated PDF output directory |
 
-## Skill Details
+## Skills
 
 ### `/init [optional: paste resume text]`
 
