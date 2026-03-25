@@ -35,3 +35,6 @@ output/
 
 ## macOS ##
 .DS_Store
+
+## Project config ##
+CLAUDE.md
