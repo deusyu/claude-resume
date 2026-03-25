@@ -62,6 +62,22 @@ The same work experience gets different framing depending on the target role. A 
 
 ### 1. Install
 
+**Option A: Install as a Skill (recommended)**
+
+```bash
+npx skills add deusyu/claude-resume --yes
+```
+
+Then in any directory:
+
+```
+/resume init
+```
+
+The skill auto-scaffolds the project structure (copies `resume.cls`, `Makefile`, creates `experiences/` directories).
+
+**Option B: Clone the repo**
+
 ```bash
 git clone https://github.com/deusyu/claude-resume.git
 cd claude-resume
@@ -70,74 +86,50 @@ claude
 
 ### 2. Onboarding — initialize your experience data
 
-**Option A: Guided setup (recommended for first-time users)**
+**Guided setup (recommended for first-time users)**
 
 ```
-/init
+/resume init
 ```
 
-The skill walks you through a Q&A — name, education, work history, projects, skills — one question at a time. All `experiences/` files are generated automatically.
+The skill walks you through a Q&A — name, education, work history, projects, skills — one question at a time.
 
-**Option B: Import from existing resume**
-
-Paste your existing resume, LinkedIn export, or any text describing your background:
+**Import from existing resume**
 
 ```
-/init <paste your resume text here>
+/resume init <paste your resume text here>
 ```
 
 The skill parses and structures it into the right format automatically.
 
-**Option C: Edit manually**
-
-Edit the files under `experiences/` directly:
-
-| File | Content |
-|------|---------|
-| `profile.md` | Name, contact info, education |
-| `work/*.md` | Work history — one file per company |
-| `projects.md` | Personal / open-source projects |
-| `skills.md` | Full skill inventory with categories |
-| `honors.md` | Awards + quantified metrics quick-reference |
-
-### 3. Generate a résumé
+### 3. Generate a resume
 
 ```
-/generate-resume Backend Engineer
+/resume generate Backend Engineer
 ```
 
 Or point to a JD file:
 
 ```
-/generate-resume jobs/bytedance-backend.md
+/resume generate jobs/bytedance-backend.md
 ```
 
 The skill shows a tailoring plan (what to include, what to cut, how to reframe) and asks for confirmation before generating.
 
-### 4. Build PDF
-
-```bash
-make en    # English PDF (resume.pdf)
-make zh    # Chinese PDF (resume-zh.pdf)
-make all   # Both
-```
-
-### 5. Keep it updated
-
-As your career evolves, update your experience data with natural language:
+### 4. Keep it updated
 
 ```
-/add-experience Led a new project building a real-time data pipeline, processing 1M events/sec
-/add-experience Got AWS Solutions Architect Professional certification
+/resume add Led a new project building a real-time data pipeline, processing 1M events/sec
+/resume add Got AWS Solutions Architect Professional certification
 ```
 
 ## Project Structure
 
-| File | Purpose |
+| Path | Purpose |
 |------|---------|
-| `.claude/commands/init.md` | Onboarding — guided Q&A or paste-to-structure import |
-| `.claude/commands/generate-resume.md` | Core — reads experiences, analyzes JD, generates tailored `.tex` |
-| `.claude/commands/add-experience.md` | Maintain — add/update experiences via natural language |
+| `skills/resume/SKILL.md` | Skill definition — all workflows (init, generate, add) |
+| `skills/resume/assets/` | Bundled assets (resume.cls, Makefile, templates) |
+| `skills/resume/references/` | LaTeX command reference |
 | `experiences/` | Structured experience data (source of truth) |
 | `jobs/_template.md` | Template for job description input |
 | `resume.tex` | Current active LaTeX source |
@@ -146,18 +138,18 @@ As your career evolves, update your experience data with natural language:
 | `.history/` | Auto-backup of previous `.tex` versions |
 | `output/` | Generated PDF output directory |
 
-## Skills
+## Subcommands
 
-### `/init [optional: paste resume text]`
+### `/resume init [optional: paste resume text]`
 
-Onboarding skill. Two modes:
+Onboarding. Two modes:
 
 - **No arguments** → guided Q&A, one question at a time (name → education → work → projects → skills → honors)
 - **With text** → parses your existing resume or LinkedIn export into structured `experiences/` files
 
-### `/generate-resume [job title or JD file path]`
+### `/resume generate [job title or JD file path]`
 
-The core skill. Full pipeline:
+The core workflow. Full pipeline:
 
 1. **Read** all experience files from `experiences/`
 2. **Analyze** job requirements — extract key skills, priorities
@@ -166,13 +158,13 @@ The core skill. Full pipeline:
 5. **Generate** — write tailored `resume.tex` using `resume.cls` commands
 6. **Build** — `make en` → copy PDF to `output/`
 
-### `/add-experience [description]`
+### `/resume add [description]`
 
 Natural language interface to update experience files:
 
 ```
-/add-experience Built an open-source RAG project with LlamaIndex, got 200+ stars
-/add-experience Got AWS Solutions Architect certification
+/resume add Built an open-source RAG project with LlamaIndex, got 200+ stars
+/resume add Got AWS Solutions Architect certification
 ```
 
 ## Customization
